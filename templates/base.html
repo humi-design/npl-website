@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{% block title %}PrecisionBolt{% endblock %}</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#040a18;
+  --glass:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.08);
+  --text:#dbe3f5;
+  --muted:#8a93a6;
+  --blue:#2f7cff;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
+body{
+  background: radial-gradient(circle at top left,#0b1a35,#02060f 70%);
+  color:var(--text);
+}
+
+/* TOPBAR */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 40px;
+  font-size:12px;
+  color:var(--muted);
+  border-bottom:1px solid var(--border);
+}
+
+/* NAVBAR */
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 40px;
+  background:rgba(4,10,24,0.7);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:700;
+}
+.logo span{
+  color:var(--blue);
+}
+
+.navbar nav{
+  display:flex;
+  gap:30px;
+}
+
+.navbar nav a{
+  text-decoration:none;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.navbar nav a.active,
+.navbar nav a:hover{
+  color:white;
+}
+
+.quote{
+  position:relative;
+}
+
+.quote a{
+  padding:10px 16px;
+  border-radius:10px;
+  background:rgba(47,124,255,0.15);
+  color:var(--blue);
+  text-decoration:none;
+}
+
+.badge{
+  position:absolute;
+  top:-6px;
+  right:-6px;
+  background:var(--blue);
+  color:white;
+  font-size:11px;
+  padding:3px 7px;
+  border-radius:50%;
+}
+
+/* FOOTER */
+.footer{
+  margin-top:80px;
+  border-top:1px solid var(--border);
+  padding:50px 40px 20px;
+}
+
+.footer-container{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr 1.2fr;
+  gap:40px;
+}
+
+.footer h4{
+  margin-bottom:15px;
+}
+
+.footer a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:13px;
+}
+
+.footer a:hover{
+  color:white;
+}
+
+.footer-bottom{
+  margin-top:30px;
+  border-top:1px solid var(--border);
+  padding-top:15px;
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:var(--muted);
+}
+
+@media(max-width:900px){
+  .footer-container{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:600px){
+  .footer-container{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+
+{% block extra_css %}{% endblock %}
+
+</head>
+
+<body>
+
+<div class="topbar">
+  <div>ISO 9001:2015 Certified | Global Export to 20+ Countries</div>
+  <div>info@nirmalprecision.com</div>
+</div>
+
+<header class="navbar">
+
+<a href="{{ url_for('home') }}" style="text-decoration:none; color:inherit;">
+  <div class="logo">NIRMAL<span>PRECISION</span></div>
+</a>
+
+  <nav>
+    <a href="{{ url_for('products_page') }}" class="{% if request.endpoint=='products_page' %}active{% endif %}">Products</a>
+    <a href="{{ url_for('compare') }}">Compare</a>
+    <a href="{{ url_for('export') }}">Export</a>
+    <a href="{{ url_for('about') }}">About</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+  </nav>
+
+  <div class="quote">
+  <a href="{{ url_for('cart') }}">Quote Cart</a>
+  <div class="badge">{{ cart|default([])|length }}</div>
+</div>
+
+</header>
+
+{% block content %}{% endblock %}
+
+<!-- FOOTER -->
+<footer class="footer">
+
+  <div class="footer-container">
+
+    <div>
+      <div class="logo">NIRMAL<span>PRECISION</span></div>
+      <p style="font-size:13px; color:var(--muted); max-width:260px;">
+        Nirmal Precision Pvt Ltd is a premier provider renowned for its precision engineering and unwavering commitment to excellence.
+      </p>
+    </div>
+
+    <div>
+      <h4>Products</h4>
+      <ul>
+        {% if categories %}
+  {% for cat in categories[:4] %}
+    <li>
+      <a href="{{ url_for('products_page', category=cat.name) }}">
+        {{ cat.name }}
+      </a>
+    </li>
+  {% endfor %}
+{% endif %}
+      </ul>
+    </div>
+
+    <div>
+      <h4>Resources</h4>
+      <a href="#">Engineering Tools</a><br>
+      <a href="#">Export Capabilities</a>
+    </div>
+
+    <div>
+      <h4>Company</h4>
+      <a href="{{ url_for('about') }}">About</a><br>
+      <a href="{{ url_for('contact') }}">Contact</a>
+    </div>
+
+    <div>
+      <h4>Contact</h4>
+      <a href="mailto:info@nirmalprecision.com">info@nirmalprecision.com</a><br>
+      <a href="tel:+918424849942">+91 8424849942</a>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <div>&copy; 2026 Nirmal Precision</div>
+    <div>Privacy Policy &bull; Terms of Service</div>
+  </div>
+
+</footer>
+
+</body>
+</html>

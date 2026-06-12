@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/products.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Product Catalog</h1>
+</section>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- FILTER SIDEBAR -->
+  <div class="sidebar">
+
+    <form method="get" action="{{ url_for('products_page') }}">
+
+      <h3>Filters</h3>
+
+      <input 
+        type="text" 
+        name="search" 
+        placeholder="Part # or Name"
+        value="{{ search_text or '' }}"
+      >
+
+      <h4>Category</h4>
+
+      <!-- ALL -->
+      <label>
+        <input type="radio" name="category" value=""
+        {% if not selected_category %}checked{% endif %}>
+        All Categories
+      </label>
+
+      <!-- LOOP -->
+      {% for c in categories %}
+      <label>
+        <input type="radio" name="category" value="{{ c.name }}"
+        {% if selected_category == c.name %}checked{% endif %}>
+        {{ c.name }}
+      </label>
+      {% endfor %}
+
+      <button type="submit">Apply Filters</button>
+
+      <a href="{{ url_for('products_page') }}" class="clear">Clear Filters</a>
+
+    </form>
+
+  </div>
+
+  <!-- PRODUCT GRID -->
+  <div class="content">
+
+    <div class="content-header">
+      <p class="count">
+        Showing {{ products|length }} products
+      </p>
+    </div>
+
+    <div class="grid">
+
+      {% for p in products %}
+      <div class="card">
+
+        <!-- PRODUCT CODE -->
+        <div class="code">
+          {{ p.code }}
+        </div>
+
+        <!-- IMAGE -->
+        <div class="image-wrapper">
+          <img src="{{ p.image }}" alt="{{ p.name }}">
+        </div>
+
+        <!-- CATEGORY -->
+        <div class="category">
+          {{ p.category }}
+        </div>
+
+        <!-- TITLE -->
+        <h3 class="title">
+          {{ p.name }}
+        </h3>
+
+        <!-- SPECS -->
+        <div class="specs">
+          <p><span>Material:</span> {{ p.material }}</p>
+          <p><span>Size:</span> {{ p.size }}</p>
+          <p><span>Standard:</span> {{ p.standard }}</p>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions">
+          <a href="{{ url_for('add_to_cart', id=p.id) }}" class="btn">RFQ</a>
+          <a href="{{ url_for('compare_add', id=p.id) }}" class="icon">≡</a>
+        </div>
+
+      </div>
+      {% endfor %}
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

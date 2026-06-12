@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% block title %}Compare{% endblock %}
+
+{% block extra_css %}
+<style>
+
+/* HERO */
+.hero{
+  padding:60px 40px;
+  font-size:40px;
+  font-weight:700;
+  opacity:0.15;
+}
+
+/* SECTION */
+.section{
+  padding:30px 40px;
+}
+
+/* ACTION BAR */
+.actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  color:var(--muted);
+}
+
+.btn{
+  border:1px solid var(--border);
+  padding:8px 14px;
+  border-radius:6px;
+  margin-left:10px;
+  color:white;
+  text-decoration:none;
+  font-size:13px;
+}
+
+/* COMPARE TABLE */
+.compare{
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  backdrop-filter:blur(10px);
+}
+
+/* ROW */
+.row{
+  display:grid;
+  grid-template-columns:220px repeat(4,1fr);
+  border-bottom:1px solid var(--border);
+}
+
+/* HEADER ROW */
+.row.head{
+  background:rgba(255,255,255,0.03);
+}
+
+/* CELL */
+.cell{
+  padding:18px;
+  font-size:14px;
+  border-right:1px solid var(--border);
+}
+
+.cell:last-child{
+  border-right:none;
+}
+
+/* PRODUCT CELL */
+.cell.prod{
+  text-align:center;
+  position:relative;
+}
+
+/* REMOVE BUTTON */
+.remove{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:#ef4444;
+  color:#fff;
+  width:20px;
+  height:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  text-decoration:none;
+  font-size:12px;
+}
+
+/* PRODUCT TEXT */
+.prod-name{
+  font-weight:600;
+}
+
+.prod-code{
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* SPEC TITLE */
+.spec-title{
+  color:var(--muted);
+  font-weight:500;
+}
+
+/* VIEW BUTTON */
+.view{
+  display:block;
+  text-align:center;
+  background:var(--blue);
+  padding:10px;
+  border-radius:8px;
+  text-decoration:none;
+  color:#fff;
+  font-size:13px;
+}
+
+/* EMPTY */
+.empty{
+  padding:60px;
+  text-align:center;
+  color:var(--muted);
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .row{
+    grid-template-columns:150px repeat(2,1fr);
+  }
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">Comparison</section>
+
+<section class="section">
+
+<div class="actions">
+
+  <div>
+    {{ compare|length }} products selected (max 4)
+  </div>
+
+  <div>
+    <a class="btn" href="{{ url_for('products_page') }}">+ Add More</a>
+    <a class="btn" href="{{ url_for('clear_compare') }}">Clear All</a>
+  </div>
+
+</div>
+
+{% if compare|length == 0 %}
+
+<div class="empty">
+  <h3>No products selected</h3>
+  <p>Add products to compare features</p>
+</div>
+
+{% else %}
+
+<div class="compare">
+
+    <!-- HEADER -->
+    <div class="row head">
+        <div class="cell">Specification</div>
+
+        {% for p in compare %}
+        <div class="cell prod">
+
+            <a href="{{ url_for('remove_compare', id=p.id) }}" class="remove">×</a>
+
+            <div class="prod-name">{{ p.name }}</div>
+
+            {% if p.code %}
+            <div class="prod-code">{{ p.code }}</div>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+
+        {% if compare|length < 4 %}
+        <div class="cell prod">+ Add Product</div>
+        {% endif %}
+    </div>
+
+    <!-- DYNAMIC SPECS -->
+    {% for spec in spec_keys %}
+    <div class="row">
+
+        <div class="cell spec-title">{{ spec }}</div>
+
+        {% for p in compare %}
+        <div class="cell">
+            {{ p.specs.get(spec, '—') }}
+        </div>
+        {% endfor %}
+
+        {% if compare|length < 4 %}
+        <div class="cell"></div>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+
+    <!-- ACTION -->
+    <div class="row">
+        <div class="cell">Action</div>
+
+        {% for p in compare %}
+        <div class="cell">
+            <a class="view" href="{{ url_for('products_page') }}">
+                View Details
+            </a>
+        </div>
+        {% endfor %}
+
+        {% if compare|length < 4 %}
+        <div class="cell"></div>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endif %}
+
+</section>
+
+{% endblock %}

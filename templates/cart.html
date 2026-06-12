@@ -1,0 +1,603 @@
+{% extends "base.html" %}
+{% block title %}Quote Cart{% endblock %}
+
+{% block extra_css %}
+<style>
+
+.quote-popup{
+  margin-top:20px;
+  padding:25px;
+  border-radius:16px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(16px);
+  animation:fadeIn 0.3s ease;
+}
+
+.rfq-header h3{
+  margin-bottom:5px;
+}
+
+.rfq-header p{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:15px;
+}
+
+.rfq-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.quote-popup input,
+.quote-popup textarea{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:white;
+  outline:none;
+  font-size:14px;
+}
+
+.quote-popup textarea{
+  margin-top:15px;
+  min-height:130px;
+  resize:none;
+}
+
+.hidden{
+  display:none;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+@media(max-width:700px){
+  .rfq-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* WRAPPER */
+.quote-wrapper{
+  margin-top:40px;
+  padding:30px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px);
+}
+
+/* HEADER */
+.quote-header{
+  margin-bottom:25px;
+}
+.quote-header h2{
+  font-size:28px;
+}
+.quote-header p{
+  color:var(--muted);
+  font-size:14px;
+}
+
+/* GRID */
+.quote-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:25px;
+}
+
+/* CARD */
+.quote-card{
+  padding:25px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+  backdrop-filter:blur(12px);
+}
+
+/* INPUT GROUP */
+.input-group{
+  margin-bottom:15px;
+}
+.input-group label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+.input-group input,
+.input-group textarea{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:white;
+  outline:none;
+}
+.input-group textarea{
+  min-height:100px;
+}
+
+/* ITEMS */
+.quote-items{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  margin-top:10px;
+}
+
+.quote-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.03);
+}
+
+.quote-item p{
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* QTY BADGE */
+.qty-badge{
+  background:var(--blue);
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:12px;
+}
+
+/* FOOTER */
+.quote-footer{
+  margin-top:20px;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .quote-grid{
+    grid-template-columns:1fr;
+  }
+}
+.qty-input{
+  width:50px;
+  text-align:center;
+  background:none;
+  border:none;
+  color:white;
+  outline:none;
+}
+
+/* PAGE */
+.cart-wrapper{
+  padding:60px 40px;
+}
+
+.cart-title{
+  font-size:32px;
+  font-weight:700;
+  margin-bottom:30px;
+}
+
+/* GRID */
+.cart-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:30px;
+}
+
+/* ITEMS */
+.cart-items{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.cart-card{
+  display:flex;
+  gap:20px;
+  padding:20px;
+  border-radius:14px;
+  background:var(--glass);
+  border:1px solid var(--border);
+  backdrop-filter:blur(12px);
+  align-items:center;
+}
+
+.cart-img{
+  width:90px;
+  height:90px;
+  border-radius:10px;
+  background:#0b1a35;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.cart-img img{
+  width:60px;
+}
+
+/* DETAILS */
+.cart-info{
+  flex:1;
+}
+
+.cart-info h4{
+  font-size:16px;
+  margin-bottom:5px;
+}
+
+.cart-info p{
+  font-size:13px;
+  color:var(--muted);
+}
+
+/* ACTIONS */
+.cart-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.qty{
+  display:flex;
+  align-items:center;
+  border:1px solid var(--border);
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.qty button{
+  background:none;
+  border:none;
+  padding:6px 10px;
+  color:white;
+  cursor:pointer;
+}
+
+.qty span{
+  padding:0 10px;
+}
+
+.remove{
+  font-size:12px;
+  color:#ff5c5c;
+  cursor:pointer;
+}
+
+/* SUMMARY */
+.summary{
+  padding:25px;
+  border-radius:16px;
+  background:var(--glass);
+  border:1px solid var(--border);
+  backdrop-filter:blur(12px);
+  height:fit-content;
+}
+
+.summary h3{
+  margin-bottom:20px;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  margin:10px 0;
+  font-size:14px;
+  color:var(--muted);
+}
+
+.summary-total{
+  margin-top:15px;
+  padding-top:15px;
+  border-top:1px solid var(--border);
+  font-size:16px;
+  font-weight:600;
+  display:flex;
+  justify-content:space-between;
+}
+
+/* BUTTONS */
+.btn{
+  width:100%;
+  margin-top:20px;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.primary{
+  background:var(--blue);
+  color:white;
+}
+
+.secondary{
+  background:rgba(255,255,255,0.05);
+  color:white;
+}
+
+/* EMPTY */
+.empty{
+  text-align:center;
+  padding:80px;
+  color:var(--muted);
+}
+
+@media(max-width:900px){
+  .cart-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="cart-wrapper">
+
+  <div class="cart-title">Quote Cart</div>
+
+  {% if cart and cart|length > 0 %}
+
+  <div class="cart-grid">
+
+    <!-- ITEMS -->
+    <div class="cart-items">
+
+      {% for item in cart %}
+  
+      <div class="cart-card" data-id="{{ item.id }}">
+
+  <!-- IMAGE -->
+  <div class="cart-img">
+    <img src="{{ item.image or '/static/bolt.png' }}">
+  </div>
+
+  <!-- INFO -->
+  <div class="cart-info">
+    <h4>{{ item.name }}</h4>
+    <p>{{ item.spec or "Standard Industrial Fastener" }}</p>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="cart-actions">
+
+    <!-- QUANTITY -->
+    <div class="qty">
+      <button onclick="updateQty({{ item.id }}, 'decrease')">−</button>
+
+      <input 
+        type="number"
+        value="{{ item.qty }}"
+        min="1"
+        class="qty-input"
+        onblur="setQty({{ item.id }}, this.value)"
+      >
+
+      <button onclick="updateQty({{ item.id }}, 'increase')">+</button>
+    </div>
+
+    <!-- REMOVE -->
+    <div class="remove" onclick="removeItem({{ item.id }})">
+      Remove
+    </div>
+
+  </div>
+
+</div>
+
+  
+  
+      {% endfor %}
+
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary">
+
+      <h3>Summary</h3>
+
+      <div class="summary-row">
+        <span>Total Items</span>
+        <span>{{ cart|length }}</span>
+      </div>
+
+      <div class="summary-row">
+        <span>Estimated Weight</span>
+        <span>{{ total_weight or "—" }}</span>
+      </div>
+
+      <div class="summary-total">
+        <span>Quote Ready</span>
+        <span>✔</span>
+      </div>
+
+     <button class="btn primary" onclick="openQuoteForm()">
+  Request Quote
+</button>
+      <a href="{{ url_for('products_page') }}">
+  <button class="btn secondary">Continue Browsing</button>
+</a>
+
+    </div>
+    
+    <!-- RFQ FORM -->
+<div id="quote-form" class="quote-popup hidden">
+
+  <div class="rfq-header">
+    <h3>Request a Quote</h3>
+    <p>Fill details and submit your requirement</p>
+  </div>
+
+  <form method="POST" action="{{ url_for('submit_quote') }}">
+
+    <!-- GRID -->
+    <div class="rfq-grid">
+
+      <input type="text" name="name" placeholder="Full Name *" required>
+      <input type="email" name="email" placeholder="Email Address *" required>
+
+      <input type="text" name="company" placeholder="Company Name *" required>
+      <input type="text" name="phone" placeholder="Phone Number">
+
+      <input type="text" name="country" placeholder="Country">
+
+    </div>
+
+    <!-- MESSAGE -->
+    <textarea 
+      name="message" 
+      id="quote-message"
+      placeholder="Add specifications, coating, grade, delivery timeline..."
+    ></textarea>
+
+    <!-- ACTION -->
+    <button type="submit" class="btn primary">
+      Send Quote Request
+    </button>
+
+  </form>
+
+</div>
+<!-- PREMIUM RFQ FORM -->
+<div id="quote-form" class="quote-wrapper hidden">
+
+  <!-- HEADER -->
+  <div class="quote-header">
+    <h2>Request a Quote</h2>
+    <p>Submit your requirements and our export team will respond within 24 hours</p>
+  </div>
+</div>
+  </div>
+
+  {% else %}
+
+  <div class="empty">
+    <h3>Your cart is empty</h3>
+    <p>Add products to request a quote</p>
+  </div>
+
+  {% endif %}
+
+</div>
+
+<script>
+function removeItem(id){
+  fetch(`/remove/${id}`)
+    .then(() => {
+      document.querySelector(`[data-id='${id}']`).remove();
+    });
+}
+</script>
+
+<script>
+function updateQty(id, action){
+  fetch(`/update_qty/${id}/${action}`)
+    .then(res => res.text())
+    .then(data => {
+
+      const card = document.querySelector(`[data-id='${id}']`);
+
+      if(data === "deleted"){
+        card.remove();
+      } else {
+        const json = JSON.parse(data);
+        card.querySelector(".qty-value").innerText = json.qty;
+      }
+
+    });
+}
+</script>
+
+<script>
+function setQty(id, value){
+
+  fetch(`/set_qty/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "qty=" + value
+  })
+  .then(res => res.text())
+  .then(data => {
+
+    const card = document.querySelector(`[data-id='${id}']`);
+
+    if(data === "deleted"){
+      if(card) card.remove();
+      return;
+    }
+
+    try {
+      const json = JSON.parse(data);
+      card.querySelector(".qty-input").value = json.qty;
+    } catch(e){
+      console.log("Parse error:", data);
+    }
+
+  })
+  .catch(err => console.log("Fetch error:", err));
+}
+</script>
+
+<script>
+function toggleQuoteForm(){
+  const form = document.getElementById("quote-form");
+  form.classList.toggle("hidden");
+
+  if(!form.classList.contains("hidden")){
+    form.scrollIntoView({behavior:"smooth"});
+  }
+}
+</script>
+
+<script>
+function openQuoteForm(){
+  const form = document.getElementById("quote-form");
+  const msgBox = document.getElementById("quote-message");
+
+  if(msgBox.value.trim() === ""){
+
+    let msg = "Quote Request:\n\n";
+
+    // ✅ LOOP THROUGH CART CARDS
+    const cards = document.querySelectorAll(".cart-card");
+
+    cards.forEach(card => {
+
+      // get product name
+      const name = card.querySelector(".cart-info h4")?.innerText || "Item";
+
+      // get LIVE quantity from input
+      const qtyInput = card.querySelector(".qty-input");
+      const qty = qtyInput ? qtyInput.value : 1;
+
+      msg += `• ${name} (Qty: ${qty})\n`;
+    });
+
+    msg += "\n---\nAdditional Requirements:\n";
+
+    msgBox.value = msg;
+  }
+
+  form.classList.remove("hidden");
+
+  msgBox.focus();
+  msgBox.setSelectionRange(msgBox.value.length, msgBox.value.length);
+
+  form.scrollIntoView({ behavior: "smooth" });
+}
+</script>
+
+{% endblock %}

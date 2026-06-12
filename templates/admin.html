@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Panel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:#0b1b2b;
+  color:#e5e7eb;
+}
+
+.container{
+  padding:30px;
+}
+
+h1{
+  margin-bottom:20px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+/* CARD */
+.card{
+  background:#0f1f33;
+  padding:20px;
+  border-radius:12px;
+}
+
+/* INPUTS */
+input{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  background:#0b1b2b;
+  border:1px solid #1f2937;
+  color:white;
+  border-radius:6px;
+}
+
+/* BUTTON */
+button{
+  padding:10px 15px;
+  background:#3b82f6;
+  border:none;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* TABLE */
+table{
+  width:100%;
+  margin-top:10px;
+  border-collapse:collapse;
+}
+
+th, td{
+  padding:10px;
+  border-bottom:1px solid #1f2937;
+}
+
+.action-btn{
+  margin-right:8px;
+  font-size:12px;
+}
+
+.delete{
+  color:#ef4444;
+}
+
+.edit{
+  color:#22c55e;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.logout{
+  color:#ef4444;
+  text-decoration:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="topbar">
+<h1>Admin Dashboard</h1>
+<a href="/admin/logout" class="logout">Logout</a>
+</div>
+
+<div class="grid">
+
+<!-- ADD PRODUCT -->
+<div class="card">
+<h2>Add Product</h2>
+
+<form method="POST" action="/admin/add_product">
+
+<input name="code" placeholder="Code" required>
+<input name="name" placeholder="Name" required>
+<input name="category" placeholder="Category" required>
+<input name="material" placeholder="Material">
+<input name="size" placeholder="Size">
+<input name="standard" placeholder="Standard">
+<input name="image" placeholder="Image URL">
+
+<button>Add Product</button>
+
+</form>
+</div>
+
+<!-- ADD CATEGORY -->
+<div class="card">
+<h2>Add Category</h2>
+
+<form method="POST" action="/admin/add_category">
+<input name="name" placeholder="Category Name">
+<button>Add</button>
+</form>
+
+</div>
+
+<!-- ADD COUNTRY -->
+<div class="card">
+<h2>Add Country</h2>
+
+<form method="POST" action="/admin/add_country">
+<input name="name" placeholder="Country Name">
+<button>Add</button>
+</form>
+
+</div>
+
+</div>
+
+<!-- PRODUCT TABLE -->
+<div class="card">
+
+<h2>All Products</h2>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>Code</th>
+<th>Name</th>
+<th>Category</th>
+<th>Material</th>
+<th>Size</th>
+<th>Standard</th>
+<th>Actions</th>
+</tr>
+
+{% for p in products %}
+<tr>
+
+<form method="POST" action="/admin/update_product/{{ p.id }}">
+
+<td>{{ p.id }}</td>
+
+<td>
+<input name="code" value="{{ p.code }}" class="edit-field" disabled>
+</td>
+
+<td>
+<input name="name" value="{{ p.name }}" class="edit-field" disabled>
+</td>
+
+<td>
+<input name="category" value="{{ p.category }}" class="edit-field" disabled>
+</td>
+
+<td>
+<input name="material" value="{{ p.material }}" class="edit-field" disabled>
+</td>
+
+<td>
+<input name="size" value="{{ p.size }}" class="edit-field" disabled>
+</td>
+
+<td>
+<input name="standard" value="{{ p.standard }}" class="edit-field" disabled>
+</td>
+
+<td>
+
+<button type="button" onclick="enableEdit(this)">Edit</button>
+
+<button type="submit" class="save-btn" style="display:none;">Save</button>
+
+<a href="/admin/delete_product/{{ p.id }}" class="delete">Delete</a>
+
+</td>
+
+</form>
+
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+
+<script>
+function enableEdit(btn){
+    let row = btn.closest("tr");
+    let inputs = row.querySelectorAll(".edit-field");
+    let saveBtn = row.querySelector(".save-btn");
+
+    inputs.forEach(input => input.disabled = false);
+
+    btn.style.display = "none";
+    saveBtn.style.display = "inline-block";
+}
+</script>
+</html>

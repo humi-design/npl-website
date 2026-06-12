@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% block title %}Export{% endblock %}
+
+{% block extra_css %}
+<style>
+
+/* HERO */
+.hero{
+  padding:80px 40px;
+}
+
+.hero h1{
+  font-size:44px;
+  font-weight:700;
+}
+
+/* STATS */
+.stats{
+  display:flex;
+  gap:20px;
+  padding:20px 40px;
+}
+
+.stat-card{
+  flex:1;
+  background:#071a33;
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:14px;
+  padding:30px;
+  text-align:center;
+}
+
+.stat-card h2{
+  font-size:28px;
+}
+
+.stat-card p{
+  color:#9fb3d9;
+  margin-top:5px;
+}
+
+/* SECTION */
+.section{
+  padding:60px 40px;
+}
+
+.sub{
+  color:#9fb3d9;
+  margin-bottom:15px;
+}
+
+/* NETWORK */
+.network-box{
+  margin-top:20px;
+  background:#071a33;
+  padding:25px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+.pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.pill{
+  padding:8px 14px;
+  background:#0b2a55;
+  border-radius:20px;
+  font-size:13px;
+  color:#9fb3d9;
+}
+
+/* GRID */
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  padding:40px;
+}
+
+/* LIST */
+.list{
+  margin-top:20px;
+}
+
+.list li{
+  margin:10px 0;
+  color:#9fb3d9;
+}
+
+/* CERT */
+.cert-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
+}
+
+.cert{
+  padding:10px 14px;
+  border-radius:8px;
+  background:#071a33;
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+/* SHIPPING */
+.shipping-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+
+.ship{
+  background:#071a33;
+  padding:20px;
+  border-radius:12px;
+}
+
+.ship span{
+  color:#9fb3d9;
+  font-size:12px;
+}
+
+/* CTA */
+.cta{
+  margin:60px 40px;
+  padding:40px;
+  text-align:center;
+  border-radius:16px;
+  background:linear-gradient(135deg,#0b2a55,#071a33);
+}
+
+.cta-buttons{
+  margin-top:20px;
+}
+
+.btn{
+  padding:12px 20px;
+  border-radius:8px;
+  margin:5px;
+  text-decoration:none;
+}
+
+.primary{
+  background:#3b82f6;
+  color:white;
+}
+
+.secondary{
+  background:#0b2a55;
+  color:white;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .stats,
+  .grid-2,
+  .shipping-grid{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+}
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Global Export Capabilities</h1>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  {% for s in stats %}
+  <div class="stat-card">
+    <h2>{{ s.value }}</h2>
+    <p>{{ s.title }}</p>
+  </div>
+  {% endfor %}
+</section>
+
+<!-- EXPORT NETWORK -->
+<section class="section">
+
+  <h2>Our Export Network</h2>
+  <p class="sub">We supply precision fasteners to these countries and regions</p>
+
+  <div class="network-box">
+    <div class="pills">
+      {% for c in countries %}
+      <div class="pill">{{ c.name }}</div>
+      {% endfor %}
+      <div class="pill">+ 60 more countries</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- INDUSTRIES -->
+<section class="section">
+  <h2>Industries We Serve</h2>
+</section>
+
+<!-- GRID -->
+<section class="grid-2">
+
+  <div>
+    <h3>Packaging Standards</h3>
+    <ul class="list">
+      <li>Polybags with labels</li>
+      <li>Wooden pallets for bulk</li>
+      <li>Steel drums for corrosive environments</li>
+      <li>Custom cardboard boxes</li>
+      <li>Vacuum-sealed for moisture protection</li>
+      <li>Barcoded for inventory tracking</li>
+    </ul>
+  </div>
+
+  <div>
+    <h3>Compliance & Certifications</h3>
+    <div class="cert-grid">
+      <div class="cert">ISO 9001:2015</div>
+      <div class="cert">ASTM Standards</div>
+      <div class="cert">DIN Standards</div>
+      <div class="cert">RoHS</div>
+      <div class="cert">CE</div>
+      <div class="cert">BIS</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- SHIPPING -->
+<section class="section">
+
+  <h2>Shipping & Logistics</h2>
+
+  <div class="shipping-grid">
+    <div class="ship">JNPT Mumbai<br><span>Sea Freight</span></div>
+    <div class="ship">Chennai Port<br><span>Sea Freight</span></div>
+    <div class="ship">Kandla Port<br><span>Sea Freight</span></div>
+    <div class="ship">Air Freight<br><span>Multiple Hubs</span></div>
+  </div>
+
+</section>
+
+<!-- CTA -->
+<section class="cta">
+
+  <h2>Ready to Export?</h2>
+
+  <p>
+    Contact our export team to discuss your fastener requirements.
+  </p>
+
+  <div class="cta-buttons">
+    <a href="{{ url_for('contact') }}" class="btn primary">Request Quote</a>
+    <a href="{{ url_for('contact') }}" class="btn secondary">Contact Export Team</a>
+  </div>
+
+</section>
+
+{% endblock %}
