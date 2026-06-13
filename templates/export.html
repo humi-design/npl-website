@@ -1,268 +1,552 @@
 {% extends "base.html" %}
-{% block title %}Export{% endblock %}
+
+{% block title %}Export Capabilities | Global Manufacturing Partner{% endblock %}
 
 {% block extra_css %}
 <style>
-
-/* HERO */
-.hero{
-  padding:80px 40px;
+.export-hero {
+    padding: 120px 0 80px;
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%);
+    position: relative;
+    overflow: hidden;
 }
 
-.hero h1{
-  font-size:44px;
-  font-weight:700;
+.export-hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 50%;
+    height: 150%;
+    background: linear-gradient(135deg, rgba(10, 77, 156, 0.08) 0%, rgba(30, 136, 229, 0.1) 100%);
+    border-radius: 50%;
+    filter: blur(80px);
 }
 
-/* STATS */
-.stats{
-  display:flex;
-  gap:20px;
-  padding:20px 40px;
+.export-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 48px;
 }
 
-.stat-card{
-  flex:1;
-  background:#071a33;
-  border:1px solid rgba(255,255,255,0.05);
-  border-radius:14px;
-  padding:30px;
-  text-align:center;
+.export-stat {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    text-align: center;
+    transition: var(--transition);
 }
 
-.stat-card h2{
-  font-size:28px;
+.export-stat:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
 }
 
-.stat-card p{
-  color:#9fb3d9;
-  margin-top:5px;
+.export-stat-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(10, 77, 156, 0.08);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
 }
 
-/* SECTION */
-.section{
-  padding:60px 40px;
+.export-stat-icon i {
+    width: 28px;
+    height: 28px;
+    color: var(--primary);
 }
 
-.sub{
-  color:#9fb3d9;
-  margin-bottom:15px;
+.export-stat h3 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 4px;
 }
 
-/* NETWORK */
-.network-box{
-  margin-top:20px;
-  background:#071a33;
-  padding:25px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,0.05);
+.export-stat p {
+    font-size: 13px;
+    color: var(--text-muted);
 }
 
-.pills{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
+/* Network */
+.network-section {
+    background: var(--bg-light);
 }
 
-.pill{
-  padding:8px 14px;
-  background:#0b2a55;
-  border-radius:20px;
-  font-size:13px;
-  color:#9fb3d9;
+.network-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-/* GRID */
-.grid-2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:40px;
-  padding:40px;
+.network-pill {
+    padding: 10px 20px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: var(--transition);
 }
 
-/* LIST */
-.list{
-  margin-top:20px;
+.network-pill:hover {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
 }
 
-.list li{
-  margin:10px 0;
-  color:#9fb3d9;
+/* Process */
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
 }
 
-/* CERT */
-.cert-grid{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:20px;
+.process-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    text-align: center;
+    position: relative;
+    transition: var(--transition);
 }
 
-.cert{
-  padding:10px 14px;
-  border-radius:8px;
-  background:#071a33;
-  border:1px solid rgba(255,255,255,0.05);
+.process-card::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -24px;
+    width: 24px;
+    height: 2px;
+    background: var(--border);
 }
 
-/* SHIPPING */
-.shipping-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:20px;
+.process-card:last-child::after {
+    display: none;
 }
 
-.ship{
-  background:#071a33;
-  padding:20px;
-  border-radius:12px;
+.process-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
 }
 
-.ship span{
-  color:#9fb3d9;
-  font-size:12px;
+.process-number {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--white);
 }
 
-/* CTA */
-.cta{
-  margin:60px 40px;
-  padding:40px;
-  text-align:center;
-  border-radius:16px;
-  background:linear-gradient(135deg,#0b2a55,#071a33);
+.process-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
-.cta-buttons{
-  margin-top:20px;
+.process-card p {
+    font-size: 13px;
+    color: var(--text-muted);
 }
 
-.btn{
-  padding:12px 20px;
-  border-radius:8px;
-  margin:5px;
-  text-decoration:none;
+/* Certifications */
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
 
-.primary{
-  background:#3b82f6;
-  color:white;
+.cert-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    text-align: center;
+    transition: var(--transition);
 }
 
-.secondary{
-  background:#0b2a55;
-  color:white;
+.cert-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
 }
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  .stats,
-  .grid-2,
-  .shipping-grid{
-    display:grid;
-    grid-template-columns:1fr;
-  }
+.cert-icon {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
 }
 
+.cert-icon i {
+    width: 36px;
+    height: 36px;
+    color: var(--white);
+}
+
+.cert-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.cert-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Logistics */
+.logistics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.logistics-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: var(--transition);
+}
+
+.logistics-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.logistics-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.logistics-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-light);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logistics-icon i {
+    width: 24px;
+    height: 24px;
+    color: var(--primary);
+}
+
+.logistics-header h4 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.logistics-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .export-stats,
+    .process-grid,
+    .logistics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .process-card::after {
+        display: none;
+    }
+    
+    .cert-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .export-stats,
+    .process-grid,
+    .logistics-grid,
+    .cert-grid {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
 {% endblock %}
 
-
 {% block content %}
-
-<!-- HERO -->
-<section class="hero">
-  <h1>Global Export Capabilities</h1>
-</section>
-
-<!-- STATS -->
-<section class="stats">
-  {% for s in stats %}
-  <div class="stat-card">
-    <h2>{{ s.value }}</h2>
-    <p>{{ s.title }}</p>
-  </div>
-  {% endfor %}
-</section>
-
-<!-- EXPORT NETWORK -->
-<section class="section">
-
-  <h2>Our Export Network</h2>
-  <p class="sub">We supply precision fasteners to these countries and regions</p>
-
-  <div class="network-box">
-    <div class="pills">
-      {% for c in countries %}
-      <div class="pill">{{ c.name }}</div>
-      {% endfor %}
-      <div class="pill">+ 60 more countries</div>
+<!-- ===== HERO ===== -->
+<section class="export-hero">
+    <div class="container">
+        <div data-aos="fade-up">
+            <span class="section-label">
+                <i data-lucide="ship"></i>
+                Export Capabilities
+            </span>
+            <h1 class="section-title" style="font-size: 48px; text-align: left; max-width: 600px;">
+                Global Manufacturing Partner
+            </h1>
+            <p class="section-subtitle" style="max-width: 600px; text-align: left;">
+                Comprehensive export services with complete documentation, quality assurance, and logistics support for seamless international delivery.
+            </p>
+        </div>
+        <div class="export-stats" data-aos="fade-up" data-aos-delay="100">
+            {% for s in stats %}
+            <div class="export-stat">
+                <div class="export-stat-icon">
+                    <i data-lucide="globe"></i>
+                </div>
+                <h3>{{ s.value }}</h3>
+                <p>{{ s.title }}</p>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-  </div>
-
 </section>
 
-<!-- INDUSTRIES -->
-<section class="section">
-  <h2>Industries We Serve</h2>
-</section>
-
-<!-- GRID -->
-<section class="grid-2">
-
-  <div>
-    <h3>Packaging Standards</h3>
-    <ul class="list">
-      <li>Polybags with labels</li>
-      <li>Wooden pallets for bulk</li>
-      <li>Steel drums for corrosive environments</li>
-      <li>Custom cardboard boxes</li>
-      <li>Vacuum-sealed for moisture protection</li>
-      <li>Barcoded for inventory tracking</li>
-    </ul>
-  </div>
-
-  <div>
-    <h3>Compliance & Certifications</h3>
-    <div class="cert-grid">
-      <div class="cert">ISO 9001:2015</div>
-      <div class="cert">ASTM Standards</div>
-      <div class="cert">DIN Standards</div>
-      <div class="cert">RoHS</div>
-      <div class="cert">CE</div>
-      <div class="cert">BIS</div>
+<!-- ===== EXPORT NETWORK ===== -->
+<section class="section network-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-label">
+                <i data-lucide="map-pin"></i>
+                Export Network
+            </span>
+            <h2 class="section-title">Countries We Serve</h2>
+            <p class="section-subtitle">
+                Our precision components reach procurement teams across Europe, Americas, and Asia-Pacific.
+            </p>
+        </div>
+        <div class="network-grid" data-aos="fade-up">
+            {% for c in countries %}
+            <div class="network-pill">{{ c.name }}</div>
+            {% endfor %}
+            <div class="network-pill" style="background: var(--primary); color: var(--white); border-color: var(--primary);">
+                + 70 More Countries
+            </div>
+        </div>
     </div>
-  </div>
-
 </section>
 
-<!-- SHIPPING -->
+<!-- ===== EXPORT PROCESS ===== -->
 <section class="section">
-
-  <h2>Shipping & Logistics</h2>
-
-  <div class="shipping-grid">
-    <div class="ship">JNPT Mumbai<br><span>Sea Freight</span></div>
-    <div class="ship">Chennai Port<br><span>Sea Freight</span></div>
-    <div class="ship">Kandla Port<br><span>Sea Freight</span></div>
-    <div class="ship">Air Freight<br><span>Multiple Hubs</span></div>
-  </div>
-
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-label">
+                <i data-lucide="git-branch"></i>
+                Export Process
+            </span>
+            <h2 class="section-title">From Order to Delivery</h2>
+        </div>
+        <div class="process-grid">
+            <div class="process-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="process-number">1</div>
+                <h4>Quote & Order</h4>
+                <p>Receive RFQ, confirm specifications, and finalize pricing.</p>
+            </div>
+            <div class="process-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="process-number">2</div>
+                <h4>Production</h4>
+                <p>CNC machining with real-time quality monitoring.</p>
+            </div>
+            <div class="process-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="process-number">3</div>
+                <h4>Quality Check</h4>
+                <p>100% inspection with PPAP/FAI documentation.</p>
+            </div>
+            <div class="process-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="process-number">4</div>
+                <h4>Export & Delivery</h4>
+                <p>Custom packaging, documentation, and global shipping.</p>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- CTA -->
-<section class="cta">
-
-  <h2>Ready to Export?</h2>
-
-  <p>
-    Contact our export team to discuss your fastener requirements.
-  </p>
-
-  <div class="cta-buttons">
-    <a href="{{ url_for('contact') }}" class="btn primary">Request Quote</a>
-    <a href="{{ url_for('contact') }}" class="btn secondary">Contact Export Team</a>
-  </div>
-
+<!-- ===== PACKAGING ===== -->
+<section class="section" style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-label">
+                <i data-lucide="package"></i>
+                Packaging Standards
+            </span>
+            <h2 class="section-title">Export-Ready Packaging</h2>
+        </div>
+        <div class="grid grid-3">
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-icon">
+                    <i data-lucide="box"></i>
+                </div>
+                <h4 class="feature-title">Industrial Packaging</h4>
+                <p class="feature-text">Polybags with labels, wooden pallets for bulk, steel drums for corrosive environments.</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="feature-icon">
+                    <i data-lucide="droplets"></i>
+                </div>
+                <h4 class="feature-title">Moisture Protection</h4>
+                <p class="feature-text">Vacuum-sealed packaging with desiccants for moisture-sensitive applications.</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-icon">
+                    <i data-lucide="qr-code"></i>
+                </div>
+                <h4 class="feature-title">Traceability</h4>
+                <p class="feature-text">Barcoded labels with batch numbers, material certificates, and inspection reports.</p>
+            </div>
+        </div>
+    </div>
 </section>
 
+<!-- ===== CERTIFICATIONS ===== -->
+<section class="section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-label">
+                <i data-lucide="award"></i>
+                Certifications
+            </span>
+            <h2 class="section-title">Compliance & Standards</h2>
+        </div>
+        <div class="cert-grid">
+            <div class="cert-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="cert-icon">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <h4>ISO 9001:2015</h4>
+                <p>Quality Management System</p>
+            </div>
+            <div class="cert-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="cert-icon">
+                    <i data-lucide="leaf"></i>
+                </div>
+                <h4>RoHS Compliant</h4>
+                <p>Hazardous Substance Free</p>
+            </div>
+            <div class="cert-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="cert-icon">
+                    <i data-lucide="flask-conical"></i>
+                </div>
+                <h4>REACH Compliant</h4>
+                <p>Chemical Registration</p>
+            </div>
+            <div class="cert-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="cert-icon">
+                    <i data-lucide="ruler"></i>
+                </div>
+                <h4>DIN Standards</h4>
+                <p>German Industrial Norms</p>
+            </div>
+            <div class="cert-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="cert-icon">
+                    <i data-lucide="ruler"></i>
+                </div>
+                <h4>ISO Standards</h4>
+                <p>International Organization for Standardization</p>
+            </div>
+            <div class="cert-card" data-aos="fade-up" data-aos-delay="350">
+                <div class="cert-icon">
+                    <i data-lucide="file-text"></i>
+                </div>
+                <h4>PPAP / FAI</h4>
+                <p>Production Part Approval Process</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== LOGISTICS ===== -->
+<section class="section" style="background: var(--bg-light);">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-label">
+                <i data-lucide="truck"></i>
+                Logistics Partners
+            </span>
+            <h2 class="section-title">Shipping & Delivery</h2>
+        </div>
+        <div class="logistics-grid">
+            <div class="logistics-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="logistics-header">
+                    <div class="logistics-icon">
+                        <i data-lucide="ship"></i>
+                    </div>
+                    <h4>Sea Freight</h4>
+                </div>
+                <p>JNPT Mumbai, Chennai Port, Kandla Port with FCL/LCL options.</p>
+            </div>
+            <div class="logistics-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="logistics-header">
+                    <div class="logistics-icon">
+                        <i data-lucide="plane"></i>
+                    </div>
+                    <h4>Air Freight</h4>
+                </div>
+                <p>Chhatrapati Shivaji International Airport for urgent shipments.</p>
+            </div>
+            <div class="logistics-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="logistics-header">
+                    <div class="logistics-icon">
+                        <i data-lucide="file-text"></i>
+                    </div>
+                    <h4>Documentation</h4>
+                </div>
+                <p>Bill of Lading, Commercial Invoice, Certificate of Origin, etc.</p>
+            </div>
+            <div class="logistics-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="logistics-header">
+                    <div class="logistics-icon">
+                        <i data-lucide="calculator"></i>
+                    </div>
+                    <h4>Incoterms</h4>
+                </div>
+                <p>FOB, CIF, DDP, EXW and other terms available on request.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+    <div class="cta-bg"></div>
+    <div class="container">
+        <div class="cta-content" data-aos="fade-up">
+            <h2 class="cta-title">Ready to Source Globally?</h2>
+            <p class="cta-text">
+                Contact our export team for detailed pricing, lead times, and shipping options to your location.
+            </p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('contact') }}" class="btn btn-white">
+                    <i data-lucide="mail"></i>
+                    Contact Export Team
+                </a>
+                <a href="{{ url_for('products_page') }}" class="btn" style="background: transparent; border: 2px solid white; color: white;">
+                    <i data-lucide="package"></i>
+                    Browse Products
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

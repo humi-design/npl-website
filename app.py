@@ -111,7 +111,7 @@ def create_session():
 def global_data():
     return dict(
         categories=Category.query.all(),
-        
+        compare=Compare.query.all()
     )
 
 
@@ -318,6 +318,20 @@ def compare_add(id):
     db.session.add(item)
     db.session.commit()
 
+    return redirect(url_for("compare"))
+
+@app.route("/remove_compare/<int:id>")
+def remove_compare(id):
+    item = Compare.query.get(id)
+    if item:
+        db.session.delete(item)
+        db.session.commit()
+    return redirect(url_for("compare"))
+
+@app.route("/clear_compare")
+def clear_compare():
+    Compare.query.delete()
+    db.session.commit()
     return redirect(url_for("compare"))
 
 

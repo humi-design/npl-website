@@ -1,603 +1,490 @@
 {% extends "base.html" %}
-{% block title %}Quote Cart{% endblock %}
+
+{% block title %}RFQ Cart | Request Quote{% endblock %}
 
 {% block extra_css %}
 <style>
-
-.quote-popup{
-  margin-top:20px;
-  padding:25px;
-  border-radius:16px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.08);
-  backdrop-filter:blur(16px);
-  animation:fadeIn 0.3s ease;
+.cart-page {
+    padding: 80px 0;
 }
 
-.rfq-header h3{
-  margin-bottom:5px;
+.cart-header {
+    margin-bottom: 40px;
 }
 
-.rfq-header p{
-  font-size:13px;
-  color:var(--muted);
-  margin-bottom:15px;
+.cart-header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 8px;
 }
 
-.rfq-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
+.cart-header p {
+    color: var(--text-muted);
 }
 
-.quote-popup input,
-.quote-popup textarea{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:transparent;
-  color:white;
-  outline:none;
-  font-size:14px;
+.cart-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 32px;
 }
 
-.quote-popup textarea{
-  margin-top:15px;
-  min-height:130px;
-  resize:none;
+/* Cart Items */
+.cart-items {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
 }
 
-.hidden{
-  display:none;
+.cart-items-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 16px;
+    padding: 16px 24px;
+    background: var(--bg-light);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
 }
 
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(10px);}
-  to{opacity:1; transform:translateY(0);}
+.cart-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 16px;
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
 }
 
-@media(max-width:700px){
-  .rfq-grid{
-    grid-template-columns:1fr;
-  }
+.cart-item:last-child {
+    border-bottom: none;
 }
 
-/* WRAPPER */
-.quote-wrapper{
-  margin-top:40px;
-  padding:30px;
-  border-radius:20px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.08);
-  backdrop-filter:blur(20px);
+.cart-item-product {
+    display: flex;
+    gap: 16px;
+    align-items: center;
 }
 
-/* HEADER */
-.quote-header{
-  margin-bottom:25px;
-}
-.quote-header h2{
-  font-size:28px;
-}
-.quote-header p{
-  color:var(--muted);
-  font-size:14px;
-}
-
-/* GRID */
-.quote-grid{
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:25px;
+.cart-item-image {
+    width: 80px;
+    height: 80px;
+    background: var(--bg-light);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
-/* CARD */
-.quote-card{
-  padding:25px;
-  border-radius:18px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.06);
-  backdrop-filter:blur(12px);
+.cart-item-image img {
+    max-width: 60%;
+    max-height: 60%;
+    object-fit: contain;
 }
 
-/* INPUT GROUP */
-.input-group{
-  margin-bottom:15px;
-}
-.input-group label{
-  display:block;
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:5px;
-}
-.input-group input,
-.input-group textarea{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:transparent;
-  color:white;
-  outline:none;
-}
-.input-group textarea{
-  min-height:100px;
+.cart-item-info h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
 }
 
-/* ITEMS */
-.quote-items{
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-  margin-top:10px;
+.cart-item-info p {
+    font-size: 13px;
+    color: var(--text-muted);
 }
 
-.quote-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:12px;
-  border-radius:10px;
-  background:rgba(255,255,255,0.03);
+.cart-item-price {
+    font-weight: 600;
+    color: var(--text-muted);
 }
 
-.quote-item p{
-  font-size:12px;
-  color:var(--muted);
+.cart-item-qty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* QTY BADGE */
-.qty-badge{
-  background:var(--blue);
-  padding:6px 12px;
-  border-radius:20px;
-  font-size:12px;
+.qty-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    transition: var(--transition);
 }
 
-/* FOOTER */
-.quote-footer{
-  margin-top:20px;
+.qty-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
 }
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  .quote-grid{
-    grid-template-columns:1fr;
-  }
-}
-.qty-input{
-  width:50px;
-  text-align:center;
-  background:none;
-  border:none;
-  color:white;
-  outline:none;
+.qty-value {
+    width: 40px;
+    text-align: center;
+    font-weight: 600;
 }
 
-/* PAGE */
-.cart-wrapper{
-  padding:60px 40px;
+.cart-item-total {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
 }
 
-.cart-title{
-  font-size:32px;
-  font-weight:700;
-  margin-bottom:30px;
+.cart-item-remove {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FEF2F2;
+    border-radius: var(--radius);
+    color: var(--error);
+    transition: var(--transition);
 }
 
-/* GRID */
-.cart-grid{
-  display:grid;
-  grid-template-columns:2fr 1fr;
-  gap:30px;
+.cart-item-remove:hover {
+    background: var(--error);
+    color: var(--white);
 }
 
-/* ITEMS */
-.cart-items{
-  display:flex;
-  flex-direction:column;
-  gap:20px;
+/* RFQ Form */
+.cart-sidebar {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
 }
 
-.cart-card{
-  display:flex;
-  gap:20px;
-  padding:20px;
-  border-radius:14px;
-  background:var(--glass);
-  border:1px solid var(--border);
-  backdrop-filter:blur(12px);
-  align-items:center;
+.rfq-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
 }
 
-.cart-img{
-  width:90px;
-  height:90px;
-  border-radius:10px;
-  background:#0b1a35;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.rfq-header {
+    padding: 24px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: var(--white);
 }
 
-.cart-img img{
-  width:60px;
+.rfq-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
 }
 
-/* DETAILS */
-.cart-info{
-  flex:1;
+.rfq-header p {
+    font-size: 13px;
+    opacity: 0.8;
 }
 
-.cart-info h4{
-  font-size:16px;
-  margin-bottom:5px;
+.rfq-body {
+    padding: 24px;
 }
 
-.cart-info p{
-  font-size:13px;
-  color:var(--muted);
+.rfq-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-/* ACTIONS */
-.cart-actions{
-  display:flex;
-  align-items:center;
-  gap:10px;
+.rfq-form .form-group {
+    margin-bottom: 0;
 }
 
-.qty{
-  display:flex;
-  align-items:center;
-  border:1px solid var(--border);
-  border-radius:8px;
-  overflow:hidden;
+.rfq-form input,
+.rfq-form textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    transition: var(--transition);
 }
 
-.qty button{
-  background:none;
-  border:none;
-  padding:6px 10px;
-  color:white;
-  cursor:pointer;
+.rfq-form input:focus,
+.rfq-form textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(10, 77, 156, 0.1);
 }
 
-.qty span{
-  padding:0 10px;
+.rfq-form textarea {
+    min-height: 100px;
+    resize: vertical;
 }
 
-.remove{
-  font-size:12px;
-  color:#ff5c5c;
-  cursor:pointer;
+.rfq-submit {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: var(--radius);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
-/* SUMMARY */
-.summary{
-  padding:25px;
-  border-radius:16px;
-  background:var(--glass);
-  border:1px solid var(--border);
-  backdrop-filter:blur(12px);
-  height:fit-content;
+.rfq-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(10, 77, 156, 0.3);
 }
 
-.summary h3{
-  margin-bottom:20px;
+/* Empty Cart */
+.cart-empty {
+    text-align: center;
+    padding: 80px 40px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
 }
 
-.summary-row{
-  display:flex;
-  justify-content:space-between;
-  margin:10px 0;
-  font-size:14px;
-  color:var(--muted);
+.cart-empty-icon {
+    width: 100px;
+    height: 100px;
+    background: var(--bg-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
 }
 
-.summary-total{
-  margin-top:15px;
-  padding-top:15px;
-  border-top:1px solid var(--border);
-  font-size:16px;
-  font-weight:600;
-  display:flex;
-  justify-content:space-between;
+.cart-empty-icon i {
+    width: 48px;
+    height: 48px;
+    color: var(--text-muted);
 }
 
-/* BUTTONS */
-.btn{
-  width:100%;
-  margin-top:20px;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
+.cart-empty h3 {
+    font-size: 24px;
+    margin-bottom: 8px;
 }
 
-.primary{
-  background:var(--blue);
-  color:white;
+.cart-empty p {
+    color: var(--text-muted);
+    margin-bottom: 24px;
 }
 
-.secondary{
-  background:rgba(255,255,255,0.05);
-  color:white;
+/* Summary */
+.cart-summary {
+    padding: 24px;
+    background: var(--bg-light);
+    border-top: 1px solid var(--border);
 }
 
-/* EMPTY */
-.empty{
-  text-align:center;
-  padding:80px;
-  color:var(--muted);
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
 }
 
-@media(max-width:900px){
-  .cart-grid{
-    grid-template-columns:1fr;
-  }
+.summary-row:last-child {
+    margin-bottom: 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 16px;
+    font-weight: 700;
 }
 
+.summary-row span:last-child {
+    color: var(--text-muted);
+}
+
+.summary-row:last-child span:last-child {
+    color: var(--primary);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .cart-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cart-sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .cart-items-header {
+        display: none;
+    }
+    
+    .cart-item {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .cart-item-product {
+        flex-direction: column;
+        text-align: center;
+    }
+}
 </style>
 {% endblock %}
 
 {% block content %}
-
-<div class="cart-wrapper">
-
-  <div class="cart-title">Quote Cart</div>
-
-  {% if cart and cart|length > 0 %}
-
-  <div class="cart-grid">
-
-    <!-- ITEMS -->
-    <div class="cart-items">
-
-      {% for item in cart %}
-  
-      <div class="cart-card" data-id="{{ item.id }}">
-
-  <!-- IMAGE -->
-  <div class="cart-img">
-    <img src="{{ item.image or '/static/bolt.png' }}">
-  </div>
-
-  <!-- INFO -->
-  <div class="cart-info">
-    <h4>{{ item.name }}</h4>
-    <p>{{ item.spec or "Standard Industrial Fastener" }}</p>
-  </div>
-
-  <!-- ACTIONS -->
-  <div class="cart-actions">
-
-    <!-- QUANTITY -->
-    <div class="qty">
-      <button onclick="updateQty({{ item.id }}, 'decrease')">−</button>
-
-      <input 
-        type="number"
-        value="{{ item.qty }}"
-        min="1"
-        class="qty-input"
-        onblur="setQty({{ item.id }}, this.value)"
-      >
-
-      <button onclick="updateQty({{ item.id }}, 'increase')">+</button>
+<div class="cart-page">
+    <div class="container">
+        {% if cart and cart|length > 0 %}
+        <div class="cart-header" data-aos="fade-up">
+            <h1>Request for Quotation</h1>
+            <p>Review your selected products and submit your requirements</p>
+        </div>
+        
+        <div class="cart-grid">
+            <!-- Cart Items -->
+            <div class="cart-items" data-aos="fade-up">
+                <div class="cart-items-header">
+                    <span>Product</span>
+                    <span>Specification</span>
+                    <span>Quantity</span>
+                    <span>Action</span>
+                    <span></span>
+                </div>
+                
+                {% for item in cart %}
+                <div class="cart-item" data-id="{{ item.id }}">
+                    <div class="cart-item-product">
+                        <div class="cart-item-image">
+                            <img src="{{ item.image or '/static/img/products/1.webp' }}" alt="{{ item.name }}">
+                        </div>
+                        <div class="cart-item-info">
+                            <h4>{{ item.name }}</h4>
+                            <p>{{ item.spec or 'Standard Industrial Fastener' }}</p>
+                        </div>
+                    </div>
+                    <div class="cart-item-price">
+                        <span class="cart-item-total">On Request</span>
+                    </div>
+                    <div class="cart-item-qty">
+                        <button class="qty-btn" onclick="updateQty({{ item.id }}, 'decrease')">−</button>
+                        <span class="qty-value">{{ item.qty }}</span>
+                        <button class="qty-btn" onclick="updateQty({{ item.id }}, 'increase')">+</button>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('products_page') }}" class="btn btn-ghost" style="padding: 8px 12px; font-size: 12px;">
+                            <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                            Add More
+                        </a>
+                    </div>
+                    <button class="cart-item-remove" onclick="removeItem({{ item.id }})">
+                        <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                    </button>
+                </div>
+                {% endfor %}
+                
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Total Items</span>
+                        <span>{{ cart|length }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Total Quantity</span>
+                        <span>{{ cart|sum(attribute='qty') }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Quote Status</span>
+                        <span>Ready to Submit</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RFQ Form -->
+            <div class="cart-sidebar" data-aos="fade-up" data-aos-delay="100">
+                <div class="rfq-card">
+                    <div class="rfq-header">
+                        <h3>Submit Quote Request</h3>
+                        <p>Our export team will respond within 24 hours</p>
+                    </div>
+                    <div class="rfq-body">
+                        <form method="POST" action="{{ url_for('submit_quote') }}" class="rfq-form">
+                            <div class="form-group">
+                                <input type="text" name="name" placeholder="Full Name *" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" name="email" placeholder="Email Address *" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="company" placeholder="Company Name *" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="phone" placeholder="Phone Number">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="country" placeholder="Country">
+                            </div>
+                            <div class="form-group">
+                                <textarea name="message" placeholder="Additional requirements, specifications, or questions..."></textarea>
+                            </div>
+                            <button type="submit" class="rfq-submit">
+                                <i data-lucide="send"></i>
+                                Submit Quote Request
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="cart-empty" data-aos="fade-up">
+            <div class="cart-empty-icon">
+                <i data-lucide="clipboard-list"></i>
+            </div>
+            <h3>Your RFQ Cart is Empty</h3>
+            <p>Add products to your cart to request a quotation</p>
+            <a href="{{ url_for('products_page') }}" class="btn btn-primary">
+                <i data-lucide="package"></i>
+                Browse Products
+            </a>
+        </div>
+        {% endif %}
     </div>
-
-    <!-- REMOVE -->
-    <div class="remove" onclick="removeItem({{ item.id }})">
-      Remove
-    </div>
-
-  </div>
-
 </div>
+{% endblock %}
 
-  
-  
-      {% endfor %}
-
-    </div>
-
-    <!-- SUMMARY -->
-    <div class="summary">
-
-      <h3>Summary</h3>
-
-      <div class="summary-row">
-        <span>Total Items</span>
-        <span>{{ cart|length }}</span>
-      </div>
-
-      <div class="summary-row">
-        <span>Estimated Weight</span>
-        <span>{{ total_weight or "—" }}</span>
-      </div>
-
-      <div class="summary-total">
-        <span>Quote Ready</span>
-        <span>✔</span>
-      </div>
-
-     <button class="btn primary" onclick="openQuoteForm()">
-  Request Quote
-</button>
-      <a href="{{ url_for('products_page') }}">
-  <button class="btn secondary">Continue Browsing</button>
-</a>
-
-    </div>
-    
-    <!-- RFQ FORM -->
-<div id="quote-form" class="quote-popup hidden">
-
-  <div class="rfq-header">
-    <h3>Request a Quote</h3>
-    <p>Fill details and submit your requirement</p>
-  </div>
-
-  <form method="POST" action="{{ url_for('submit_quote') }}">
-
-    <!-- GRID -->
-    <div class="rfq-grid">
-
-      <input type="text" name="name" placeholder="Full Name *" required>
-      <input type="email" name="email" placeholder="Email Address *" required>
-
-      <input type="text" name="company" placeholder="Company Name *" required>
-      <input type="text" name="phone" placeholder="Phone Number">
-
-      <input type="text" name="country" placeholder="Country">
-
-    </div>
-
-    <!-- MESSAGE -->
-    <textarea 
-      name="message" 
-      id="quote-message"
-      placeholder="Add specifications, coating, grade, delivery timeline..."
-    ></textarea>
-
-    <!-- ACTION -->
-    <button type="submit" class="btn primary">
-      Send Quote Request
-    </button>
-
-  </form>
-
-</div>
-<!-- PREMIUM RFQ FORM -->
-<div id="quote-form" class="quote-wrapper hidden">
-
-  <!-- HEADER -->
-  <div class="quote-header">
-    <h2>Request a Quote</h2>
-    <p>Submit your requirements and our export team will respond within 24 hours</p>
-  </div>
-</div>
-  </div>
-
-  {% else %}
-
-  <div class="empty">
-    <h3>Your cart is empty</h3>
-    <p>Add products to request a quote</p>
-  </div>
-
-  {% endif %}
-
-</div>
-
+{% block scripts %}
 <script>
-function removeItem(id){
-  fetch(`/remove/${id}`)
-    .then(() => {
-      document.querySelector(`[data-id='${id}']`).remove();
-    });
+function removeItem(id) {
+    fetch(`/remove/${id}`)
+        .then(() => {
+            const item = document.querySelector(`[data-id="${id}"]`);
+            if (item) {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                setTimeout(() => item.remove(), 300);
+            }
+        });
+}
+
+function updateQty(id, action) {
+    fetch(`/update_qty/${id}/${action}`)
+        .then(res => res.text())
+        .then(data => {
+            const card = document.querySelector(`[data-id="${id}"]`);
+            if (data === "deleted") {
+                card.style.opacity = '0';
+                setTimeout(() => card.remove(), 300);
+            } else {
+                try {
+                    const json = JSON.parse(data);
+                    card.querySelector(".qty-value").textContent = json.qty;
+                } catch (e) {}
+            }
+        });
 }
 </script>
-
-<script>
-function updateQty(id, action){
-  fetch(`/update_qty/${id}/${action}`)
-    .then(res => res.text())
-    .then(data => {
-
-      const card = document.querySelector(`[data-id='${id}']`);
-
-      if(data === "deleted"){
-        card.remove();
-      } else {
-        const json = JSON.parse(data);
-        card.querySelector(".qty-value").innerText = json.qty;
-      }
-
-    });
-}
-</script>
-
-<script>
-function setQty(id, value){
-
-  fetch(`/set_qty/${id}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: "qty=" + value
-  })
-  .then(res => res.text())
-  .then(data => {
-
-    const card = document.querySelector(`[data-id='${id}']`);
-
-    if(data === "deleted"){
-      if(card) card.remove();
-      return;
-    }
-
-    try {
-      const json = JSON.parse(data);
-      card.querySelector(".qty-input").value = json.qty;
-    } catch(e){
-      console.log("Parse error:", data);
-    }
-
-  })
-  .catch(err => console.log("Fetch error:", err));
-}
-</script>
-
-<script>
-function toggleQuoteForm(){
-  const form = document.getElementById("quote-form");
-  form.classList.toggle("hidden");
-
-  if(!form.classList.contains("hidden")){
-    form.scrollIntoView({behavior:"smooth"});
-  }
-}
-</script>
-
-<script>
-function openQuoteForm(){
-  const form = document.getElementById("quote-form");
-  const msgBox = document.getElementById("quote-message");
-
-  if(msgBox.value.trim() === ""){
-
-    let msg = "Quote Request:\n\n";
-
-    // ✅ LOOP THROUGH CART CARDS
-    const cards = document.querySelectorAll(".cart-card");
-
-    cards.forEach(card => {
-
-      // get product name
-      const name = card.querySelector(".cart-info h4")?.innerText || "Item";
-
-      // get LIVE quantity from input
-      const qtyInput = card.querySelector(".qty-input");
-      const qty = qtyInput ? qtyInput.value : 1;
-
-      msg += `• ${name} (Qty: ${qty})\n`;
-    });
-
-    msg += "\n---\nAdditional Requirements:\n";
-
-    msgBox.value = msg;
-  }
-
-  form.classList.remove("hidden");
-
-  msgBox.focus();
-  msgBox.setSelectionRange(msgBox.value.length, msgBox.value.length);
-
-  form.scrollIntoView({ behavior: "smooth" });
-}
-</script>
-
 {% endblock %}
