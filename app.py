@@ -404,24 +404,10 @@ def compare():
     )
 
 
-@app.route("/remove_compare/<int:id>")
-def remove_compare(id):
-    item = Compare.query.filter_by(product_id=id).first()
+# ======================
+# SUBMIT QUOTE
+# ======================
 
-    if item:
-        db.session.delete(item)
-        db.session.commit()
-
-    return redirect(url_for("compare"))
-
-
-@app.route("/clear_compare")
-def clear_compare():
-    Compare.query.delete()
-    db.session.commit()
-    return redirect(url_for("compare"))
-    
-    
 from email.mime.text import MIMEText
 import smtplib
 
