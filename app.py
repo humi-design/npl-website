@@ -1,10 +1,14 @@
 import os 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
 from urllib.parse import quote_plus
-from flask import session
 import uuid
+import logging
+
+# Set up debug logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 pymysql.install_as_MySQLdb()
 
@@ -25,6 +29,7 @@ f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+app.secret_key = "supersecretkey"
 
 # ======================
 # MODELS
@@ -103,16 +108,54 @@ class QuoteItem(db.Model):
     qty = db.Column(db.Integer)
 
 @app.before_request
-def create_session():
+def ensure_session_id():
+    """Ensure every visitor has a unique session ID and DB is ready."""
+    # Initialize database table if needed
+    ensure_db_ready()
+    
+    # Ensure session ID exists
     if "user_id" not in session:
         session["user_id"] = str(uuid.uuid4())
-        
+        logger.debug(f"Created new session_id: {session['user_id']}")
+
+
 @app.context_processor
-def global_data():
-    return dict(
-        categories=Category.query.all(),
-        compare=Compare.query.all()
-    )
+def inject_cart_context():
+    """
+    Inject user-specific cart data into all templates.
+    
+    - If user is logged in, fetches cart using user_id from session
+    - If user is not logged in, fetches cart using session_id from session
+    - NEVER uses global Cart.query.all() which would show all users' carts
+    """
+    try:
+        # Skip context for static files
+        from flask import request
+        if request.endpoint and request.endpoint.startswith('static'):
+            return dict(cart=[], cart_count=0, categories=[], compare=[])
+        
+        current_session_id = session.get("user_id")
+        
+        # Safety check: if no session_id, return empty cart
+        if not current_session_id:
+            return dict(cart=[], cart_count=0, categories=[], compare=[])
+        
+        # Fetch only THIS visitor's cart items
+        user_cart = Cart.query.filter_by(session_id=current_session_id).all()
+        cart_count = len(user_cart)
+        
+        # Debug logging
+        logger.debug(f"[CART CONTEXT] session_id: {current_session_id}, cart_count: {cart_count}")
+        
+        return dict(
+            cart=user_cart,
+            cart_count=cart_count,
+            categories=Category.query.all(),
+            compare=Compare.query.all()
+        )
+    except Exception as e:
+        logger.error(f"Cart context error: {e}")
+        return dict(cart=[], cart_count=0, categories=[], compare=[])
 
 
 # ======================
@@ -120,12 +163,7 @@ def global_data():
 # ======================
 
 @app.route("/")
-@app.route("/")
-
-@app.route("/")
 def home():
-    cart = Cart.query.all()
-
     categories = Category.query.all()
 
     industries = [
@@ -145,7 +183,6 @@ def home():
 
     return render_template(
         "index.html",
-        cart=cart,
         industries=industries,
         categories=categories,
         images=images
@@ -153,13 +190,12 @@ def home():
 
 
 # ======================
-# ABOUT (✅ FIX ADDED)
+# ABOUT
 # ======================
 
 @app.route("/about")
 def about():
-    cart = Cart.query.all()
-    return render_template("about.html", cart=cart)
+    return render_template("about.html")
 
 
 # ======================
@@ -181,13 +217,11 @@ def products_page():
 
     products = query.all()
     categories = Category.query.all()
-    cart = Cart.query.all()
 
     return render_template(
         "products.html",
         products=products,
         categories=categories,
-        cart=cart,
         selected_category=category,
         search_text=search
     )
@@ -238,8 +272,6 @@ def cart():
     return render_template("cart.html", cart=enriched_cart)
 
 
-from flask import jsonify
-
 @app.route("/remove/<int:id>")
 def remove_from_cart(id):
     user_id = session.get("user_id")
@@ -252,10 +284,6 @@ def remove_from_cart(id):
 
     return ("", 204)
 
-    return ("", 204)   # ✅ no redirect
-    
-    
-from flask import jsonify
 
 @app.route("/update_qty/<int:id>/<action>")
 def update_qty(id, action):
@@ -282,7 +310,10 @@ def update_qty(id, action):
 @app.route("/set_qty/<int:id>", methods=["POST"])
 def set_qty(id):
     try:
-        item = Cart.query.get(id)
+        user_id = session.get("user_id")
+        
+        # Filter by BOTH id AND session_id for security
+        item = Cart.query.filter_by(id=id, session_id=user_id).first()
 
         if not item:
             return ("not found", 404)
@@ -366,12 +397,9 @@ def compare():
 
     spec_keys = sorted(spec_keys)
 
-    cart = Cart.query.all()
-
     return render_template(
         "compare.html",
         compare=products,
-        cart=cart,
         spec_keys=spec_keys
     )
 
@@ -394,7 +422,6 @@ def clear_compare():
     return redirect(url_for("compare"))
     
     
-from flask import request, redirect, url_for, session
 from email.mime.text import MIMEText
 import smtplib
 
@@ -510,7 +537,6 @@ Message:
 @app.route("/export")
 def export():
     countries = Country.query.all()
-    cart = Cart.query.all()
 
     # ✅ Hardcoded stats (safe, no DB dependency)
     stats = [
@@ -523,8 +549,7 @@ def export():
     return render_template(
         "export.html",
         countries=countries,
-        stats=stats,
-        cart=cart
+        stats=stats
     )
 
 
@@ -555,7 +580,6 @@ def contact():
 
     return render_template(
         "contact.html",
-        cart=Cart.query.all(),
         categories=Category.query.all(),
         company_address="A-12, Priya Industrial Estate, Behind Mira Bhayandar Sports, Mumbai,401105, India",
         company_phone="+91 8424849942",
@@ -574,11 +598,6 @@ def contact():
 # ======================
 # ADMIN CONFIG
 # ======================
-
-from flask import session
-
-app.secret_key = "supersecretkey"
-
 
 # ======================
 # ADMIN LOGIN
@@ -715,6 +734,46 @@ def privacy():
 @app.route("/terms")
 def terms():
     return render_template("terms.html")
+
+
+# ======================
+# DATABASE INITIALIZATION
+# ======================
+
+_cart_table_initialized = False
+
+def init_cart_table():
+    """Ensure session_id column exists in Cart table."""
+    global _cart_table_initialized
+    if _cart_table_initialized:
+        return
+        
+    try:
+        from sqlalchemy import inspect
+        inspector = inspect(db.engine)
+        columns = [col['name'] for col in inspector.get_columns('carts')]
+        
+        if 'session_id' not in columns:
+            logger.info("Adding session_id column to carts table...")
+            db.session.execute(db.text('ALTER TABLE carts ADD COLUMN session_id VARCHAR(100)'))
+            db.session.commit()
+            logger.info("session_id column added successfully")
+        
+        _cart_table_initialized = True
+    except Exception as e:
+        logger.warning(f"Could not initialize cart table: {e}")
+        try:
+            db.session.rollback()
+        except:
+            pass
+
+def ensure_db_ready():
+    """Call this on first request to initialize DB if needed."""
+    try:
+        init_cart_table()
+    except:
+        pass
+
 # ======================
 
 if __name__ == "__main__":
