@@ -1270,13 +1270,68 @@
 <section class="hero">
     <div class="hero-bg">
         <div class="hero-bg-gradient"></div>
-        <div class="hero-bg-pattern"></div>
+        <div class="hero-bg-glow hero-bg-glow-1"></div>
+        <div class="hero-bg-glow hero-bg-glow-2"></div>
+        <div class="hero-bg-glow hero-bg-glow-3"></div>
+        <div class="hero-bg-grid"></div>
     </div>
+    
+    <!-- Floating Components with SVG -->
+    <div class="hero-components">
+        <!-- Hex Nuts -->
+        <svg class="hero-svg hero-hex-nut" viewBox="0 0 100 100">
+            <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" fill="none" stroke="#64b5f6" stroke-width="3"/>
+            <circle cx="50" cy="50" r="20" fill="none" stroke="#64b5f6" stroke-width="3"/>
+        </svg>
+        <svg class="hero-svg hero-hex-nut-2" viewBox="0 0 100 100">
+            <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" fill="none" stroke="#2196f3" stroke-width="3"/>
+            <circle cx="50" cy="50" r="18" fill="none" stroke="#2196f3" stroke-width="3"/>
+        </svg>
+        
+        <!-- Washers -->
+        <svg class="hero-svg hero-washer" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="#64b5f6" stroke-width="4"/>
+            <circle cx="50" cy="50" r="25" fill="none" stroke="#64b5f6" stroke-width="4"/>
+        </svg>
+        <svg class="hero-svg hero-washer-2" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#1976d2" stroke-width="4"/>
+            <circle cx="50" cy="50" r="20" fill="none" stroke="#1976d2" stroke-width="4"/>
+        </svg>
+        
+        <!-- Bolts -->
+        <svg class="hero-svg hero-bolt" viewBox="0 0 100 120">
+            <polygon points="50,5 85,25 85,35 50,55 15,35 15,25" fill="none" stroke="#64b5f6" stroke-width="3"/>
+            <rect x="45" y="55" width="10" height="60" fill="none" stroke="#64b5f6" stroke-width="3"/>
+        </svg>
+        
+        <!-- Rings -->
+        <svg class="hero-svg hero-ring" viewBox="0 0 100 100">
+            <ellipse cx="50" cy="50" rx="45" ry="20" fill="none" stroke="#64b5f6" stroke-width="3"/>
+        </svg>
+        <svg class="hero-svg hero-ring-2" viewBox="0 0 100 100">
+            <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#2196f3" stroke-width="3"/>
+        </svg>
+    </div>
+    
+    <!-- Particles -->
+    <div class="hero-particles">
+        <div class="hero-particle"></div>
+        <div class="hero-particle"></div>
+        <div class="hero-particle"></div>
+        <div class="hero-particle"></div>
+        <div class="hero-particle"></div>
+        <div class="hero-particle"></div>
+        <div class="hero-particle"></div>
+        <div class="hero-particle"></div>
+        <div class="hero-particle"></div>
+        <div class="hero-particle"></div>
+    </div>
+    
     <div class="container">
         <div class="hero-content">
             <div class="hero-text" data-aos="fade-up">
                 <div class="hero-badge">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
                     ISO 9001:2015 Certified Manufacturer
                 </div>
                 <h1 class="hero-title">
@@ -1298,44 +1353,64 @@
                 </div>
             </div>
             <div class="hero-visual" data-aos="fade-up" data-aos-delay="100">
-                <div class="hero-image-wrapper">
-                    <img class="hero-image" src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&q=80" alt="Precision Manufacturing">
-                    <div class="hero-image-overlay">
-                        <div class="hero-stats-bar">
-                            <div class="hero-stat">
-                                <div class="hero-stat-value">25+</div>
-                                <div class="hero-stat-label">Years Experience</div>
-                            </div>
-                            <div class="hero-stat">
-                                <div class="hero-stat-value">80+</div>
-                                <div class="hero-stat-label">Countries</div>
-                            </div>
-                            <div class="hero-stat">
-                                <div class="hero-stat-value">2000+</div>
-                                <div class="hero-stat-label">Global Clients</div>
-                            </div>
+                <div class="hero-showcase">
+                    <!-- Orbiting Ring -->
+                    <div class="hero-orbit">
+                        <div class="hero-orbit-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+                        </div>
+                        <div class="hero-orbit-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+                        </div>
+                        <div class="hero-orbit-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><polygon points="12 2 22 8.5 12 11 2 8.5 12 2"/></svg>
+                        </div>
+                        <div class="hero-orbit-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="12" rx="10" ry="4"/></svg>
                         </div>
                     </div>
-                </div>
-                <div class="hero-floating-card top-right">
-                    <div class="hero-floating-card-icon success">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    
+                    <!-- Main Product -->
+                    <div class="hero-product-main">
+                        <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&q=80" alt="Precision Manufacturing">
                     </div>
-                    <div class="hero-floating-card-title">Quality Assured</div>
-                    <div class="hero-floating-card-subtitle">Zero Defect Target</div>
-                </div>
-                <div class="hero-floating-card bottom-left">
-                    <div class="hero-floating-card-icon primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+                    
+                    <!-- Floating Cards -->
+                    <div class="hero-floating-card top-right">
+                        <div class="hero-floating-card-icon success">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <div class="hero-floating-card-title">Quality Assured</div>
+                        <div class="hero-floating-card-subtitle">Zero Defect Target</div>
                     </div>
-                    <div class="hero-floating-card-title">Global Shipping</div>
-                    <div class="hero-floating-card-subtitle">FOB Mumbai</div>
+                    <div class="hero-floating-card bottom-left">
+                        <div class="hero-floating-card-icon primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+                        </div>
+                        <div class="hero-floating-card-title">Global Shipping</div>
+                        <div class="hero-floating-card-subtitle">FOB Mumbai</div>
+                    </div>
+                    
+                    <!-- Stats Bar -->
+                    <div class="hero-stats-bar">
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">25+</div>
+                            <div class="hero-stat-label">Years Experience</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">80+</div>
+                            <div class="hero-stat-label">Countries</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">2000+</div>
+                            <div class="hero-stat-label">Global Clients</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
 <!-- ===== STATS SECTION ===== -->
 <section class="stats-section">
     <div class="container">
